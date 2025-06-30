@@ -6,16 +6,18 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Star, ChevronLeft, ChevronRight, ShoppingCart } from 'lucide-react';
 import { useGetSingleProductQuery } from '@/redux/api/ProductApi';
-import { useDispatch } from 'react-redux';
-import Link from 'next/link';
 import { useAddToCartMutation } from '@/redux/api/cartApi';
+import Link from 'next/link';
 import { toast } from 'sonner';
 
+type PageProps = {
+  params: { id: string };
+  searchParams?: { [key: string]: string | string[] | undefined };
+};
 
-export default function ProductPage({ params }) {
+export default function ProductPage({ params }: PageProps) {
   // All hooks must be called unconditionally at the top level
   const { data: product, isLoading } = useGetSingleProductQuery(params.id);
- 
   const [AddToCart] = useAddToCartMutation();
   const [quantity, setQuantity] = useState(1);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -29,15 +31,12 @@ export default function ProductPage({ params }) {
         productId: product.id,
         quantity
       };
-      console.log(cartData);
-      const res = await AddToCart(cartData).unwrap()
-      if(res?._id){
-         toast.success('Added to cart successfully');
+      const res = await AddToCart(cartData).unwrap();
+      if (res?._id) {
+        toast.success('Added to cart successfully');
       }
-     
-     
-    } catch (error) {
-      toast.error('Failed to add to cart');
+    } catch (error: any) {
+      toast.error(error?.data?.message || 'Failed to add to cart');
       console.error(error);
     }
   };

@@ -7,6 +7,7 @@ import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import { storeUserInfo } from '@/service/actions/auth.services';
 
 import { userLogin } from '@/service/actions/userLogin';
+import { loginValidationSchema } from '@/validations/auth';
 
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -18,10 +19,7 @@ import { FieldValues } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-export const validationSchema = z.object({
-    email: z.string().email("Please enter a valid email address!"),
-    password: z.string().min(6,"Must be at least 6 characters"),
-  });
+
 const login = () => {
     const router = useRouter()
     const[errors,setErrors] = useState('')
@@ -52,7 +50,7 @@ const login = () => {
                 <CardContent>
                   <EFORM 
                   onSubmit={handleLogin}
-                  resolver={zodResolver(validationSchema)}
+                  resolver={zodResolver(loginValidationSchema)}
                   defaultValues={{
                     email: "abc@g.com",
                     password: "12345678",
