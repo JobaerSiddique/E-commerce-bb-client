@@ -35,6 +35,7 @@ export const getCurrentUser = (): any | null => {
       ...decoded,
       role: decoded?.role?.toLowerCase(),
     };
+    console.log(decoded);
   } catch (error) {
     console.error("Token decode error:", error);
     return null;
